@@ -1,16 +1,17 @@
-import React, {Component} from 'react';
-import {StyleSheet, Image} from 'react-native';
+import React, {Component, useState} from 'react';
+import {Image, TextInput} from 'react-native';
 import {
   backgroundImg,
   signUpImg,
 } from '/Users/umitduran/workspace/ReadingBook/src/image'; // todo
-//module "/Users/umitduran/workspace/ReadingBook/src/image/index"
+import styles from './Login.style';
+import {postData, getData} from '../../utils/helpers';
+import axios from 'axios';
 import {
   Container,
   Content,
   Form,
   Item,
-  Input,
   Title,
   Button,
   Label,
@@ -18,64 +19,28 @@ import {
   View,
 } from 'native-base';
 
-const styles = StyleSheet.create({
-  container: {},
-  loginButton: {
-    position: 'relative',
-    margin: 25,
-    backgroundColor: '#FF3366',
-    borderRadius: 36,
-  },
-  loginButtonText: {
-    fontSize: 20,
-    color: 'white',
-    fontStyle: 'normal',
-  },
-  formContent: {
-    padding: 20,
-  },
-  loginImg: {
-    position: 'absolute',
-    left: 160,
-    bottom: 200,
-    width: 75,
-    height: 75,
-    borderColor: 'green',
-  },
-  loginBackground: {
-    flex: 1,
-    position: 'absolute',
-    width: '100%',
-    height: '240%',
-  },
-  loginTitle: {
-    marginTop: 20,
-    fontFamily: 'Monoton-Regular',
-    fontSize: 80,
-    color: '#FF3366',
-  },
-  label: {
-    alignItems: 'center',
-    textAlign: 'center',
-    color: '#28848e',
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: 20,
-  },
-  signUpLink: {
-    textAlign: 'center',
-    fontSize: 25,
-    color: 'red',
-    marginRight: 2,
-  },
-  signUpIcon: {
-    width: 50,
-    height: 50,
-  },
-});
-
 export default function LoginScreen({navigation}) {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
+  async function onPressLogin() {
+    const data = await postData(
+      'https://ikra-back.herokuapp.com/api/authenticate',
+      {
+        username: email,
+        password: password,
+      },
+    );
+  }
+
+  function onChangeEmail(sEmail, sValue) {
+    setEmail(sValue);
+  }
+
+  function onChangePassword(sPassword, sValue) {
+    setPassword(sValue);
+  }
+
   return (
     <Container style={styles.container}>
       <Content>
@@ -83,15 +48,32 @@ export default function LoginScreen({navigation}) {
         <Title style={styles.loginTitle}>iKra</Title>
         <Form style={styles.formContent}>
           <Item floatingLabel>
-            <Label style={styles.label}>Username</Label>
-            <Input />
+            <Label style={styles.label}>Email</Label>
+            <TextInput
+              autoCapitalize="none"
+              autoCompleteType="email"
+              type="email"
+              value={email}
+              onChangeText={value => onChangeEmail('Email', value)}
+            />
           </Item>
 
           <Item floatingLabel last>
             <Label style={styles.label}>Password</Label>
-            <Input />
+            <TextInput
+              type="password"
+              autoCapitalize="none"
+              autoCompleteType="password"
+              value={password}
+              onChangeText={value => onChangePassword('Password', value)}
+            />
           </Item>
-          <Button transparent block style={styles.loginButton}>
+          <Button
+            disabled={email === '' || password === ''}
+            transparent
+            block
+            style={styles.loginButton}
+            onPress={onPressLogin}>
             <Text style={styles.loginButtonText}>Log In</Text>
           </Button>
           <Text style={styles.text}>You don't have an account !</Text>

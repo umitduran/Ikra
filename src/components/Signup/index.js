@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image} from 'react-native';
+import {Image} from 'react-native';
+import styles from './Signup.style';
 import {
   Container,
   Content,
@@ -13,14 +14,6 @@ import {
   View,
 } from 'native-base';
 export default function SignUp() {
-  const styles = StyleSheet.create({
-    loginTitle: {
-      marginTop: 20,
-      fontFamily: 'Monoton-Regular',
-      fontSize: 80,
-      color: '#FF3366',
-    },
-  });
   return (
     <Container>
       <Content>
