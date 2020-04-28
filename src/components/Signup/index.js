@@ -15,11 +15,12 @@ import {
   Toast,
   Root,
 } from 'native-base';
-export default function SignUp() {
+export default function SignUp({navigation}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showIndicator, setIndicator] = useState(false);
+  const MyContext = React.createContext('');
 
   async function onPressSignUp(e) {
     setIndicator(true);
@@ -30,7 +31,8 @@ export default function SignUp() {
     });
     setIndicator(false);
     if (oSign.isAxiosError) {
-      console.log(1234);
+      // TODO: Error mesaji handle edilecek
+      console.log('error');
       Toast.show({
         text: 'Hata',
         type: 'danger',
@@ -39,10 +41,10 @@ export default function SignUp() {
         style: {marginBottom: 300, borderRadius: 10},
         buttonText: 'Kapat',
       });
-      console.log('Error');
-      // todo hata mesaji ver
+      navigation.navigate('Main');
     } else {
       console.log('Success');
+      MyContext.Token = oSign.data.token;
       Toast.show({
         text: 'Kayit Basarili',
         type: 'success',
@@ -51,7 +53,8 @@ export default function SignUp() {
         style: {marginBottom: 300, borderRadius: 10},
         buttonText: 'Kapat',
       });
-      // todo kayit basarili
+      navigation.navigate('Main');
+      // TODO kayit basarili
     }
   }
   if (!showIndicator) {
